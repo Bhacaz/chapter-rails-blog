@@ -1,4 +1,4 @@
 remote_theme: pmarsceill/just-the-docs
 aux_links:
-  "Chapter Rails blog on GitHub":
+  "Edit on GitHub":
     - "https://github.com/petalmd/chapter-rails-blog"
