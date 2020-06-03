@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 5 décembre 2019
-parent: Réunion 2019
+parent: 2019
 grand_parent: Réunion
 nav_order: 5
 ---

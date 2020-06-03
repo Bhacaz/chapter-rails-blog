@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 30 janvier 2020
-parent: Réunion 2020
+parent: 2020
 grand_parent: Réunion
 nav_order: 1
 ---
