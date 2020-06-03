@@ -1,7 +1,8 @@
 ---
 layout: default
 title: 24 octobre 2019
-parent: Réunion
+parent: Réunion 2019
+grand_parent: Réunion
 nav_order: 2
 ---
 

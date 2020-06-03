@@ -1,7 +1,8 @@
 ---
 layout: default
 title: 21 novembre 2019
-parent: Réunion
+parent: Réunion 2019
+grand_parent: Réunion
 nav_order: 4
 ---
 
