@@ -59,4 +59,18 @@ Devrait faire un `touch` sur tout les records...
 # => 1
 ```
 
+### Retour au préfix
 
+Spécifier un préfix permet de changer le nom des scopes qui seont créer.
+
+```ruby
+class ContactMethod < ApplicationRecord
+    enum visibility: { hide: 0, display: 1, registry_only: 2 }, _prefix: true
+end
+
+>> ContactMethod.display
+# devient
+>> ContactMethod.visibility_display
+```
+
+Ce qui je crois fait beaucoup de sens et reste très lisible sinon plus. Et sa réduit les change d'overwriter des méthodes.
