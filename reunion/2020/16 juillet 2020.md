@@ -32,7 +32,7 @@ Très pratique dans un where. Example, les messages qui ont été créé aujourd
 ```
 
 
-## ~Overcommit~ et Git hooks
+## ~~Overcommit~~ et Git hooks
 
 **Suggestion:** [petalmd/petalmd.rails#5742](https://github.com/petalmd/petalmd.rails/pull/5742)
 
