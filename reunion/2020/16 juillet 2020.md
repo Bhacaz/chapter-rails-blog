@@ -31,6 +31,15 @@ Très pratique dans un where. Example, les messages qui ont été créé aujourd
    (8.9ms)  SELECT COUNT(*) FROM `mess__messages` WHERE (`mess__messages`.`created_at` BETWEEN '2020-07-15 00:00:00' AND '2020-07-15 23:59:59')
 ```
 
+
+## ~~Overcommit~~ et Git hooks
+
+**Suggestion:** [petalmd/petalmd.rails#5742](https://github.com/petalmd/petalmd.rails/pull/5742)
+
+1. Enlever la gem Overcommit
+2. Ajouter des githooks dans le repo (l'installation reste facultative)
+3. Avez vous des idées de hook/script
+
 ## `Arel.sql()` (Rails 5.2 preview)
 
 [Disallow raw SQL in dangerous AR methods (rails/rails#27947)](https://github.com/rails/rails/pull/27947/files)
