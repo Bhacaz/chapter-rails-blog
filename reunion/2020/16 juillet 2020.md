@@ -31,15 +31,6 @@ Très pratique dans un where. Example, les messages qui ont été créé aujourd
    (8.9ms)  SELECT COUNT(*) FROM `mess__messages` WHERE (`mess__messages`.`created_at` BETWEEN '2020-07-15 00:00:00' AND '2020-07-15 23:59:59')
 ```
 
-
-## ~Overcommit~ et Git hooks
-
-**Suggestion:** [petalmd/petalmd.rails#5742](https://github.com/petalmd/petalmd.rails/pull/5742)
-
-1. Enlever la gem Overcommit
-2. Ajouter des githooks dans le repo (l'installation reste facultative)
-3. Avez vous des idées de hook/script
-
 ## `Arel.sql()` (Rails 5.2 preview)
 
 [Disallow raw SQL in dangerous AR methods (rails/rails#27947)](https://github.com/rails/rails/pull/27947/files)
@@ -62,6 +53,32 @@ La solution est de simplement mettre la string dans un `Arel.sql()` par example.
 
 ```ruby
 relation.pluck(Arel.sql('sche__memberships.group_id AS group_id'))
-````
+```
 
+## ~Overcommit~ et Git hooks
 
+**Suggestion:** [petalmd/petalmd.rails#5742](https://github.com/petalmd/petalmd.rails/pull/5742)
+
+1. Enlever la gem Overcommit
+2. Ajouter des githooks dans le repo (l'installation reste facultative)
+3. Avez vous des idées de hook/script
+
+## Nouvelle gem made in PetalMD
+
+Si voulez apprendre a maintenir une gem c'est l'occasion 🎉.
+
+- [Github](https://github.com/petalmd/bright_serializer)
+- [RubyGems](https://rubygems.org/gems/bright_serializer)
+
+**Pourquoi une nouvelle gem de serialization?**
+
+1. FastJSONApi n'est plus maintenue par Netflix, et beaucoup de chose son overwritter pour que sa répondre a nos besoin.
+2. On peut définir la documentation a même le serializer au lieu d'avoir une autre gem et dupliquer beaucoup de classe.
+3. C'est ~3x plus rapide.
+
+```ruby
+# Comparison:
+#               Bright:      340.0 i/s
+#                 Fast:      116.2 i/s - 2.93x  (± 0.00) slower
+#          ActiveModel:       40.9 i/s - 8.31x  (± 0.00) slower
+```
