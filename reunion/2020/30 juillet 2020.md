@@ -12,19 +12,20 @@ nav_order: 14
 
 ## VCR 📼
 
-Gem d'on j'ai entendu parlé qui pourrait être intéressant en autre dans booking.
+Gem que j'ai entendu parlé qui pourrait être intéressant dans plusieurs context, en autre dans booking.
 Du moins il est intéressant de savoir que sa existe.
 
-Nous avons déjà `webmock` pour éviter les call http durant les tests. Sinon sa
+Nous avons déjà `webmock` pour éviter les call http sortant durant les tests. Sinon sa
 serait trop long et on pourrait tomber sur des erreurs de rate limit.
 
 La gem [vcr](https://github.com/vcr/vcr) permet de mocker facilement ces appel
-en les exécutant pour de vrai si la cassette n'existe pas, l,enregistrant dans un fichier `.yml`
-et quand on veut mocker la même requête on rejoue la cassette.
+en les exécutant pour de vrai un fois et en enregistrant les paramètres du call dans un fichier 
+ `.yml` que la gem appel cassette. Donc la prochaine fois qu'on va vouloir éxécuter cette requête,
+ on peut simplement rejouer la cassette.
 
 ### Example
 
-Je veux récupérer l'information des users avec l'api Github.
+Je veux récupérer l'url de l'avatar d'un user avec l'api Github.
 
 ```ruby
 def getGithubProfilePicture(profile)
@@ -39,7 +40,7 @@ Aujourd'hui on pourait faire quelque chose du genre:
 let(:profile) { 'petalmd' }
 it 'return the avatar_url' do
   allow(HTTParty).receive(:get).with("https://api.github.com/users/#{profile}") { {'avatar_url' => 'example.com'}.to_json }
-  expect(getGithubProfilePicture(profile)).to include('example.com')
+  expect(getGithubProfilePicture(profile)).to eq('example.com')
 end
 ```
 
@@ -49,6 +50,11 @@ Ou si un DME changait la signature de leur API même chose.
 ### Example complet avec VCR
 
 ```ruby
+def getGithubProfilePicture(profile)
+  response = HTTParty.get("https://api.github.com/users/#{profile}")
+  JSON.parse(response)['avatar_url']
+end
+
 require 'httparty'
 require "vcr"
 
@@ -59,11 +65,6 @@ VCR.configure do |c|
 end
 
 describe 'Test VCR' do
-  def getGithubProfilePicture(profile)
-    response = HTTParty.get("https://api.github.com/users/#{profile}")
-    JSON.parse(response)['avatar_url']
-  end
-
   let(:user_response) do
     VCR.use_cassette("github/user", re_record_interval: 1.week.to_i) { getGithubProfilePicture('petalmd') }
   end
@@ -76,5 +77,6 @@ L'intéret que je vois c'est de mêtre l'options `re_record_interval` par exampl
 1 fois semaine pour valider que la signature des appels d'API est la même et qu'on
 l'identifie dans le CI.
 
-**Ça vous parle?**
+**Est-ce que sa vous inspire des idées?**
 
+## [Introduction a Rack](../../blog/Introduction a Rack)
