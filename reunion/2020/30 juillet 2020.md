@@ -10,6 +10,55 @@ nav_order: 14
 
 ## Tour de table
 
+## `Enumerable#pluck` a la rescousse
+
+J'ai souvent parler du `Hash#method_missing`
+
+```ruby
+array = [{ id: 1 }, { id: 2 }]
+
+# bad
+array.map(&:id)
+
+# good
+array.map { |h| h[:id] }
+```
+
+Depuis Rails 5 ActiveSupport ajoute `Enumerable#pluck`
+
+* [rails/rails#20350](https://github.com/rails/rails/pull/20350)
+* [rails/rails#20362](https://github.com/rails/rails/pull/20362)
+
+
+```ruby
+# File activesupport/lib/active_support/core_ext/enumerable.rb, line 107
+
+def pluck(*keys)
+  if keys.many?
+    map { |element| keys.map { |key| element[key] } }
+  else
+    map { |element| element[keys.first] }
+  end
+end
+```
+
+On a maintenant un racourcie pour corriger les `Hash#method_missing`
+
+```ruby
+# good
+array.pluck(:id)
+```
+
+On peut l'utiliser de la même façon que avec un `ActiveRecord::Relation`
+
+```ruby
+[{ name: "David" }, { name: "Rafael" }, { name: "Aaron" }].pluck(:name)
+# => ["David", "Rafael", "Aaron"]
+
+[{ id: 1, name: "David" }, { id: 2, name: "Rafael" }].pluck(:id, :name)
+# => [[1, "David"], [2, "Rafael"]]
+```
+
 ## VCR 📼
 
 Gem que j'ai entendu parlé qui pourrait être intéressant dans plusieurs context, en autre dans booking.
