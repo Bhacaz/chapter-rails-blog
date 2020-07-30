@@ -10,9 +10,9 @@ nav_order: 14
 
 ## Tour de table
 
-## `Enumerable#pluck` a la rescousse
+## [`Enumerable#pluck`](https://devdocs.io/rails~5.1/enumerable#method-i-pluck) a la rescousse
 
-J'ai souvent parler du `Hash#method_missing`
+J'ai souvent parlé du `Hash#method_missing`
 
 ```ruby
 array = [{ id: 1 }, { id: 2 }]
