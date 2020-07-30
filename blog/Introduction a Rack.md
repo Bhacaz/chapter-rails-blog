@@ -199,7 +199,7 @@ run(app)
 
 Dans un terminal (avec la gem puma déjà installer):
 
-```shell script
+```shell
 $ puma
 ```
 
