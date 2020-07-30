@@ -78,18 +78,15 @@ accounts = period.resources.map(&:account)
 
 # 2
 Account.joins(memberships: { group: { periods: :resources } }).merge(Schedule::Resource.where(period_id: period.id))
-
 #   Account Load (13.2ms)  SELECT `accounts`.* FROM `accounts` INNER JOIN `memberships` ON `memberships`.`account_id` = `accounts`.`id` INNER JOIN `groups` ON `groups`.`id` = `memberships`.`group_id` INNER JOIN `sche__periods` ON `sche__periods`.`group_id` = `groups`.`id` INNER JOIN `sche__resources` ON `sche__resources`.`period_id` = `sche__periods`.`id` WHERE `sche__resources`.`period_id` = 456
 
 # 3
 Account.where(id: period.resources.pluck(:account_id))
-
 #    (3.0ms)  SELECT `sche__resources`.`account_id` FROM `sche__resources` WHERE `sche__resources`.`period_id` = 456 ORDER BY id ASC
 #    Account Load (2.4ms)  SELECT `accounts`.* FROM `accounts` WHERE `accounts`.`id` IN (146, 149, 150, 145, 144, 148)
 
 # Finalement
 Account.where(id: period.resources.select(:account_id))
-
 #   Account Load (3.4ms)  SELECT `accounts`.* FROM `accounts` WHERE `accounts`.`id` IN (SELECT `sche__resources`.`account_id` FROM `sche__resources` WHERE `sche__resources`.`period_id` = 456 ORDER BY id ASC)
 ```
 
