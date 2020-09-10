@@ -16,7 +16,7 @@ Cette fonctionnalité de Rails permet d'envoyer email à l'aide des vues Rails.
 
 On commence a l'utiliser parce que la gestion dans Mandrill commence a être compliquer et très mal adapter.
 Beaucoup de templates, dupliquer en/fr, éditeur moyen, logique compliquer a faire directement dans le template, pas de versionnering,
-oublie de syncn entre l'environnment de test et de prod etc...
+oublie de sync entre l'environnment de test et de prod etc...
 
 Créer les vues de la même façon que le fait dans rails habituellement et utiliser toutes les fonctionnalité: 
     
@@ -27,7 +27,7 @@ Créer les vues de la même façon que le fait dans rails habituellement et util
 * `app/mailers/application_mailer.rb`
     * Le ActionMailer de base avec les paramètres par défaut, comme `ApplicationController`
 * `app/mailers/schedule/event_mailer.rb`
-    * L'équivalent du `Controller` (example `Schedule::TaskKinds`) avec différentes `actions` qui représente les différentes emails.
+    * L'équivalent d'un `Controller` avec différentes `actions` qui représente les différentes emails.
     * On pourrait avoir par example un `AccountMailer` avec `change_password`, `confirme_email`, etc
 * `app/views/layouts/mailer/schedule.html.erb`
     * Le layout pour les emails de schedule (booking a un autre style). C'est la coquille du email (header, footer, style). 
@@ -65,7 +65,7 @@ La liste de tout les emails sont disponible ici http://localhost:3000/rails/mail
 C'est disponible en:
 
 * Dévelopmment (utile avec le autoreload si on travaille le visuel)
-* Test `RAILS_ENV=test bundle exec rails server`. Utile pour générer les data avec `FactoryBot` mais il y a pas de autoreload.
+* Test `RAILS_ENV=test bin/rails server`. Utile pour générer les data avec `FactoryBot` mais il y a pas de autoreload.
 
 
 ### Rspec
