@@ -72,10 +72,3 @@ C'est disponible en:
 C'est possible de tester mais j'ai pas beaucoup exploré.
 
 https://relishapp.com/rspec/rspec-rails/v/3-8/docs/mailer-specs
-
-
-### NOTE 
-
-POUR celui du 24 septembre** => Hacktoberfest
-
-
