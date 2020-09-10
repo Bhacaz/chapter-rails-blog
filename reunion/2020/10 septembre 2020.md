@@ -72,3 +72,5 @@ C'est disponible en:
 C'est possible de tester mais j'ai pas beaucoup exploré.
 
 https://relishapp.com/rspec/rspec-rails/v/3-8/docs/mailer-specs
+
+## [Enumerators in Ruby](https://makandracards.com/makandra/35993-enumerators-in-ruby)
