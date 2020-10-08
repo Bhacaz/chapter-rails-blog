@@ -33,5 +33,7 @@ greating('Ruby') # => "Hello Ruby"
 
 Et autres [NEWS](https://github.com/ruby/ruby/blob/v3_0_0_preview1/NEWS.md)
 
-## Something else
+## Chewy et Elasticsearch 7 😢
+
+## [Guard](https://github.com/guard/guard)
 
