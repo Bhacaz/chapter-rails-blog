@@ -222,3 +222,12 @@ Percentage of the requests served within a certain time (ms)
 ```
 
 A noté que `localhost` fonctionne pas. Utliser `127.0.0.1`.
+
+## HTTP Header et encodage
+
+[petalmd/petalmd.rails#6108](https://github.com/petalmd/petalmd.rails/pull/6108)
+
+## `merge` ActiveRecord::Relation
+
+[ActiveRecord::SpawnMethods#merge](https://api.rubyonrails.org/classes/ActiveRecord/SpawnMethods.html#method-i-merge)
+ 
