@@ -56,12 +56,12 @@ Test.count # => 2 😱
 Le pourquoi 2 records sont créés est que la transaction parent ne
 voit pas le `raise ActiveRecord::Rollback` qui est _catch_ pas la transaction
 enfant. Ce qui implique que la transaction parent qui cumule les opérations
-a faire dans la DB va être commiter et inclue les opérations de la transaction
+ va être commiter et inclue les opérations de la transaction
 enfant.
 
-Pour pallier a ce problème, il est possible de _require_ une nouvelle
+Pour contourner le problème, il est possible de _require_ une nouvelle
 transaction `ActiveRecord::Base.transaction(requires_new: true)`. En MySQL
-cela va créer un _savepoint_ qu'on pourra rollbacker.
+cela va créer un _savepoint_ qu'on pourra peut utiliser comme point de sauvegarde pour rollbacker.
 
 ```ruby
 ActiveRecord::Base.transaction do
