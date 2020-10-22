@@ -18,10 +18,10 @@ nav_order: 19
 
 ### Petit rappel
 
-Une transaction permet de cumuler les opérations à effectuer dans la DB et
-les "enregistrer" seuelement à la fin du bloc. Cela permet de valider que
-tout est valide. Si un erreur survient dans le block, les opérations ne
-seront pas effectuer.
+Une transaction permet de cumuler les opérations à effectuer dans la DB et faire
+certain lock jusqu'à la fin du bloc. Cela permet de vérifier que
+tout est valide. Si un erreur survient dans le block, les opérations peuvent être revert
+a partir du point de sauvegarde.
 
 Particularier, l'erreur `ActiveRecord::Rollback` qui est lancer dans
 une transaction ne raise pas réellement d'erreur. La transaction sera rollbacker
