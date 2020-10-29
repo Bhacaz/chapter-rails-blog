@@ -70,6 +70,7 @@ Outdated gems included in the bundle:
 - [https://rubyweekly.com/](https://rubyweekly.com/)
 - [http://www.rubyflow.com/](http://www.rubyflow.com/)
 - [http://rubyland.news/](http://rubyland.news/)
+- [https://weblog.rubyonrails.org/news/](https://weblog.rubyonrails.org/news/)
 - dev.to - [https://dev.to/t/ruby](https://dev.to/t/ruby) - [https://dev.to/t/rails](https://dev.to/t/rails)
 - Regrouper avec [Feedly](https://feedly.com/i/collection/content/user/81719656-683a-46b1-9cdb-4a0ff2bc4426/category/be5929a3-6063-405b-88a8-cb972c4e7132)
 
