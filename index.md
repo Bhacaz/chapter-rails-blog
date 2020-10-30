@@ -7,6 +7,14 @@ nav_exclude: true
 
 Bienvenue sur le blog du chapter backend Rails de PetalMD. 🎉
 
+## [Référence](reference)
+
+Liste non exhaustive de références et d’outils pour améliorer tout le Chapter Backend Rails.
+
+## [Tutoriel](tutoriel)
+
+Petit tutoriel qui peuvent être pratiquent.
+
 ## [Blog](blog)
 
 Activle d'une certaine longueur qui peut service de références.
