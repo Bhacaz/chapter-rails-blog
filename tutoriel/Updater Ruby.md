@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Updater Ruby
-parent: Blog
-nav_order: 5
+parent: Tutoriel
+nav_order: 1
 ---
 
 # Updater Ruby

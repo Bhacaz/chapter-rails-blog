@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Update MySQL 8 development
-parent: Blog
-nav_order: 6
+parent: Tutoriel
+nav_order: 2
 ---
 
 # Update MySQL 8 development

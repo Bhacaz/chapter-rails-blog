@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Réunion
-nav_order: 3
+title: Tutoriel
+nav_order: 1
 has_children: true
 ---
 
-# Réunion
+# Tutoriel
