@@ -30,7 +30,8 @@ DESC;
 - Team Github Backend
 - Params Grape et namespace [Grape documentation](https://github.com/ruby-grape/grape#include-parent-namespaces), [PR diff](https://github.com/petalmd/petalmd.rails/pull/4902/files#diff-f2de8f1752b6f2df73b0c4e755bd69c0R4)
 
-**Script de profiling**
+### Script de profiling
+
 ```ruby
 # $ rails c
 `spring stop`
