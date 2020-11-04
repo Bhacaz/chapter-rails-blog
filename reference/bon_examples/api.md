@@ -11,9 +11,9 @@ grand_parent: Référence
 ## Routing
 
 Grape est extrèmement permissif sur le routing, mais il est possilble de faire des parrèles avec
-les convention de Rails. Référence [CRUD, Verbs, and Actions](https://guides.rubyonrails.org/routing.html#crud-verbs-and-actions)
+les conventions de Rails, [CRUD, Verbs, and Actions](https://guides.rubyonrails.org/routing.html#crud-verbs-and-actions).
 
-On peut voir le `resources` de Rails pour le `mount` de Grape.
+On peut voir le `resources` de Rails comme le `mount` de Grape.
 
 ### Basic CRUD
 
@@ -46,11 +46,11 @@ end
 mount BookingHub::PatientsApi
 ```
 
-**Implémentation:** `app/api/booking_hub/patients_api.rb` 
+**Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
 
 ### Actions custom
 
-Les actions _custom_ devrait être définie avec la méthode HTTP et ne devrais pas nécessité un nouveau
+Les actions _custom_ devraient être définies avec la méthode HTTP et ne devraient pas nécessités un nouveau
 namespace.
 
 **Exemple**
@@ -73,13 +73,13 @@ end
 mount BookingHub::PatientsApi
 ```
 
-**Implémentation:** `app/api/booking_hub/patients_api.rb` 
+**Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
 
 ### Nested resources
 
-Il est possible de faire `mount` dans une resource. La thumb rules est de ne pas avoir plus de un niveau.
+Il est possible de faire un `mount` dans une resource. La _thumb rules_ est de ne pas avoir plus de deux niveaux de resources.
 Cette recommendation vient de la documentation Rails, [Nested Resources](https://guides.rubyonrails.org/routing.html#nested-resources).
-La classe ` mount` devrait donc habituellement contenir un `namespace` par fichier d'API plus un `route_params` maximnum.
+La classe qui a été `mount` devrait donc habituellement contenir qu'un seul `resource` plus un `route_params` maximnum.
 
 **Exemple**
 
@@ -123,18 +123,18 @@ end
 mount BookingHub::PatientsApi
 ```
 
-**Implémentation:** `app/api/booking_hub/patients_api.rb` 
+**Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
 
 ## Params
 
 La définition des paramètres est un des éléments les plus utile de Grape. 
-Il y a beaucoup fonctionnalité relier au paramètres, le [README](https://github.com/ruby-grape/grape#parameters)
+Il y a beaucoup fonctionnalité relier aux paramètres, le [README](https://github.com/ruby-grape/grape#parameters)
 est le meillieur endroit pour en apprendre plus.
 
 ### DRY params et parent namespace
 
-Il est a noté que les paramètres définie en haut d'un group est
-définie pour tout les éléments a l'intérieur de ce groupe. Pour éviter
+Il est a noté que les paramètres définie en haut d'un groupe est
+définie pour tout les éléments a l'intérieur de celui-ci. Pour éviter
 la redondance et pour des quesitons de performance il est préférable de
 définir une fois le param. Pour en savoir plus consulter le [README](https://github.com/ruby-grape/grape#include-parent-namespaces)
 de Grape.
@@ -162,7 +162,7 @@ module BookingHub
 end
 ```
 
-**Implémentation:** `app/api/booking_hub/patients_api.rb` 
+**Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
 
 ## Utilisation de service
 
@@ -170,11 +170,9 @@ On utilise des services pour sortir la complexité du endpoint.
 C'est utile pour la réutilisation du code et pour la rédaction de
 testes unitaires.
 
-Si la complexité est minime,
+L'utilisation d'un service n'est pas essentiel, si la complexité est minime:
 * 5 lignes de code ou moins
 * utilisation de 1 ou 2 classes
-
-l'utilisation d'un service n'est pas nécessaire.
 
 **Exemple**
 
@@ -191,12 +189,15 @@ module BookingHub
 end
 ```
 
+**Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
+
 ## Serializer
 
-Grape va appeler `.to_json` sur l'object retourner à la fin du endpoint. Il faut donc retourner un object qui répond a cette méthode, example
+Grape va appeler `.to_json` sur l'object retourner à la fin du endpoint. 
+Il faut donc retourner un object qui répond a cette méthode, example
 un ActiveRecord ou un Serializer.
 
-L'utilisation d'un serializer est recommender, il permet de selection les attribues a retourner et convertir les
+L'utilisation d'un serializer est recommender, il permet de selectionner les attribues à retourner et convertir les
 clé pour le frontend.
 
 **Exemple**
@@ -216,5 +217,100 @@ module BookingHub
 end
 ```
 
+**Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
 
+## Tester les API
+
+Un test d'API devrait avoir c'est 2 sections:
+
+1. Cas classique de succès, qui regarde également
+    * Que le code fonctionne bien ou qu'il appel (mock) bien un service
+    * L'utilisation et le contenue de la réponse. Pour tester un minumum le serializer.
+2. Différents cas
+    * params. Exemple: validation, présence, changement de comportememt. Il n'est pas nécessaire de tester tout les cas possibles. 
+    Seulement les plus spécifiques, relatif à l'API testé.
+    * failure. Exemple: permissions
+
+Il est recommender d'utiliser des mocks pour plusieurs éléments comme:
+* Les middlewares
+* La disponibilité des produits
+* Les services
+
+Cela permet d'accélérer l'exécution des tests, de les simplifiers et de ne pas tester 2x la même chose.
+
+<details>
+
+<summary>Exemple</summary>
+
+{% highlight ruby %}
+describe V2::Messaging::ConversationsApi do
+  let(:authenticated_account) { FactoryBot.build_stubbed :confirmed_account }
+
+  before :each do
+    # Mock authentication
+    allow(Common::SecurityService).to receive(:authenticate!)
+    allow(Common::SecurityService).to receive(:current_user) { authenticated_account }
+  end
+
+  describe 'POST /api/v2/conversations/:id' do
+    subject do
+      patch path, params: params
+      response
+    end
+
+    let(:path) { "/api/v2/conversations/#{conversation.id}" }
+    let(:params) do
+      {
+        message_text: message_text,
+        message_type: message_type
+      }
+    end
+
+    let(:conversation) { FactoryBot.create(:messaging_conversation, account: account) }
+    let(:message_text) { 'test message' }
+    let(:message_type) { 'urgent' }
+    let(:message) { FactoryBot.build_stubbed :messaging_message, conversation: conversation }
+
+    context 'successful call' do
+      it 'is successful' do
+        expect_any_instance_of(Messaging::ConversationsService).to(
+          receive(:create_message).with(conversation.id, message_text, message_type, [], [], nil) { message }
+        )
+        expect(::Messaging::MessageSimpleSerializer).to receive(:new).and_call_original
+        is_expected.to be_successful
+      end
+
+      context 'with handsake' do
+        let(:handshake) { 'this_is_it' }
+        let(:params) do
+          {
+            message_text: message_text,
+            message_type: message_type,
+            handshake: handshake
+          }
+        end
+
+        it 'is successful' do
+          expect_any_instance_of(Messaging::ConversationsService).to(
+            receive(:create_message).with(conversation.id, message_text, message_type, [], [], handshake)
+          )
+          is_expected.to be_successful
+        end
+      end
+    end
+
+    context 'when the product is not available' do
+      it 'is forbidden' do
+        allow(Common::ProductService).to receive(:is_available?).with('PRODUCT_GROUP_MESSAGING_CHAT', group) { false }
+        expect(subject).to be_forbidden
+      end
+    end
+  end
+end
+
+{% endhighlight %}
+
+</details>
+
+**Implémentation**: [`spec/api/v2/messaging/conversations_api_spec.rb`](https://github.com/petalmd/petalmd.rails/blob/master/spec/api/v2/messaging/conversations_api_spec.rb)
 
