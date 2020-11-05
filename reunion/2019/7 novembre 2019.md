@@ -17,6 +17,7 @@ nav_order: 3
 ---
 
 ## [Epic Rails 5]([https://petalmd.atlassian.net/browse/RAILS-328](https://petalmd.atlassian.net/browse/RAILS-328))
+
 - 39 gems a updated (liste dans l'epic)
 	- Supprimer le _Gemfile.lock_ et faire `bundle install`, conséquence met tout à jour en respectant le _Gemfile_
 	- Une gem par sprint par dev?
@@ -26,6 +27,7 @@ nav_order: 3
 
 - Lister les gem _outdated_
 	- `bundle outdated  --only-explicit --strict --group=test`
+
 ```
 Outdated gems included in the bundle:
 ===== Group test =====
@@ -42,22 +44,27 @@ Outdated gems included in the bundle:
 ```
 
 ### Example `factory_bot_rails`
+
 - Trouver la gem sur RubyGems [factory_bot_rails](https://rubygems.org/gems/factory_bot_rails)
 1. Regarder les _runtime dependencies_
 2. Pour _railties_ `bundle info railties`
+
 ```
  * railties (4.2.11.1) ✅
         Summary: Tools for creating, working with, and running Rails applications.
         Homepage: http://www.rubyonrails.org
         Path: /Users/bhacaz/.rbenv/versions/2.4.9/lib/ruby/gems/2.4.0/gems/railties-4.2.11.1
 ```
+
 3. Pour _factory_bot_ `bundle info factory_bot`
+
 ```
   * factory_bot (4.11.1) ❌
         Summary: factory_bot provides a framework and DSL for defining and using model instance factories.
         Homepage: https://github.com/thoughtbot/factory_bot
         Path: /Users/bhacaz/.rbenv/versions/2.4.9/lib/ruby/gems/2.4.0/gems/factory_bot-4.11.1
 ```
+
 - La gem _factory_bot_ va aussi devoir être updater.
 - Trouver le `CHANGELOG` sur Github de _factory_bot_ (peut aussi être dans [releases](https://github.com/thoughtbot/factory_bot/releases))
 - Faire l'update: `bundle update <<gem>> --conservative`
@@ -73,11 +80,3 @@ Outdated gems included in the bundle:
 - [https://weblog.rubyonrails.org/news/](https://weblog.rubyonrails.org/news/)
 - dev.to - [https://dev.to/t/ruby](https://dev.to/t/ruby) - [https://dev.to/t/rails](https://dev.to/t/rails)
 - Regrouper avec [Feedly](https://feedly.com/i/collection/content/user/81719656-683a-46b1-9cdb-4a0ff2bc4426/category/be5929a3-6063-405b-88a8-cb972c4e7132)
-
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcwMjcwNDc4OSwtNzE4NDExMjQ5LDYwOT
-M0ODA1MSwtNzk1MDY2MjUxLDkzNDYxNDczMiwxNzcxNzQ2OTAs
-LTE3OTQ3NDQwNjAsLTIxMzMzMDQ4MTYsLTkzMTQ0NTQyNCwtOT
-A3MTA0MzU4LC0xNDM4MTI3NTAxXX0=
--->
