@@ -12,6 +12,8 @@ nav_order: 21
 
 ## Auto save association
 
+https://medium.com/@ynnadkrap/creating-activerecord-associations-d40bbdaba574
+
 ```ruby
 class CreateCompaniesAndOffices < ActiveRecord::Migration[5.2]
   def change
