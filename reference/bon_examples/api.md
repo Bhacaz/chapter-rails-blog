@@ -118,7 +118,7 @@ end
 # PUT /api/booking_hub/patients/:id
 # DELETE /api/booking_hub/patients/:id
 # GET /api/booking_hub/patients/:id/appointments
-# GET /api/booking_hub/patients/:id/appointments/appointment_id
+# GET /api/booking_hub/patients/:id/appointments/:appointment_id
 
 mount BookingHub::PatientsApi
 ```
@@ -223,13 +223,15 @@ end
 
 Un test d'API devrait avoir c'est 2 sections:
 
-1. Cas classique de succès, qui regarde également
+1. Cas classique de succès (minimum de paramètre pour avoir un _success_), qui regarde également
     * Que le code fonctionne bien ou qu'il appel (mock) bien un service
-    * L'utilisation et le contenue de la réponse. Pour tester un minumum le serializer.
-2. Différents cas
-    * params. Exemple: validation, présence, changement de comportememt. Il n'est pas nécessaire de tester tout les cas possibles. 
+    * L'utilisation et/ou le contenue de la réponse. Pour tester un minumum le serializer.
+2. _Success_ avec des éléments optionel
+    * Comme des paramètres optional (query, per_page, page)
+2. _Bad request_
+    * Sur les params: validation, présence. Il n'est pas nécessaire de tester tout les cas possibles. 
     Seulement les plus spécifiques, relatif à l'API testé.
-    * failure. Exemple: permissions
+    * Permission, produit, etc
 
 Il est recommender d'utiliser des mocks pour plusieurs éléments comme:
 * Les middlewares
