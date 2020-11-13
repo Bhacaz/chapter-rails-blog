@@ -164,6 +164,28 @@ end
 
 **Implémentation:** [`app/api/booking_hub/patients_api.rb`](https://github.com/petalmd/petalmd.rails/blob/master/app/api/booking_hub/patients_api.rb) 
 
+## Authorization
+
+La vérification de permissions et d'accès devrait être fais a même la classe d'API. Ces vérification peut généralement être
+faitent dans un callback et s'appliquer a tout les endpoints.
+
+```ruby
+class ConversationsApi < Grape::API
+  # Validation avant le namepspace pour s'appliquer sur tout celui-ci
+  after_validation do
+    raise ApiErrors::ForbiddenError.new('Forbidden Error', track: false) unless authenticated_account.fetch_groups.any? do |group|
+      Common::ProductService.is_available?('PRODUCT_GROUP_MESSAGING_CHAT', group)
+    end
+  end
+
+  resources :messaging do
+    get { }
+    post { }
+  end
+end
+
+```
+
 ## Utilisation de service
 
 On utilise des services pour sortir la complexité du endpoint.
