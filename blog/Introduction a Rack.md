@@ -2,7 +2,7 @@
 layout: default
 title: Introduction a Rack
 parent: Blog
-nav_order: 7
+nav_order: 5
 ---
 
 # Introduction a Rack

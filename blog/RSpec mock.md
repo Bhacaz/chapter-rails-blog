@@ -1,3 +1,10 @@
+---
+layout: default
+title: RSpec mock
+parent: Blog
+nav_order: 6
+---
+
 # RSpec mock
 
 Prémice, `allow_any_instance_of`, `expect_any_instance_of` et `receive_message_chain` sont peu recommendé. On peut les utilisé, mais souvant cela indique probablement un problème de design. Ou bien que stubber Grape ou ActiveRecord c'est compliqué.
