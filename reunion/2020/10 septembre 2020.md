@@ -29,7 +29,7 @@ Créer les vues de la même façon que le fait dans rails habituellement et util
 * `app/mailers/schedule/event_mailer.rb`
     * L'équivalent d'un `Controller` avec différentes `actions` qui représente les différentes emails.
     * On pourrait avoir par example un `AccountMailer` avec `change_password`, `confirme_email`, etc
-* `app/views/layouts/mailer/schedule.html.erb`
+* `app/views/layouts/mailer/schedule/schedule.html.erb`
     * Le layout pour les emails de schedule (booking a un autre style). C'est la coquille du email (header, footer, style). 
     On ne devrait pas avoir besoin de le changer très souvent.
 * `app/views/schedule/event_mailer/request_change_owner.html.erb`
