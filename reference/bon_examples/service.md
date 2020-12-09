@@ -85,6 +85,8 @@ end
 
 ## Service générique (_PROPOSITION_)
 
+[Ruby on Rails pattern: Service Objects](https://dev.to/joker666/ruby-on-rails-pattern-service-objects-b19)
+
 Ce type de service existe pour être réutiliser très facilement et répondre à un besoin très spécifique.
 Pour son implémentation il est recommenté de suivre
 le concept de classe [SOLID](https://en.wikipedia.org/wiki/SOLID), bien que cela peut ne pas s'appliquer à tout
