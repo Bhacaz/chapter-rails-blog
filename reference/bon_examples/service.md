@@ -86,6 +86,7 @@ end
 ## Service générique (_PROPOSITION_)
 
 [Ruby on Rails pattern: Service Objects](https://dev.to/joker666/ruby-on-rails-pattern-service-objects-b19)
+
 [Rails Service Objects: A Comprehensive Guide](https://www.toptal.com/ruby-on-rails/rails-service-objects-tutorial)
 
 Ce type de service existe pour être réutiliser très facilement et répondre à un besoin très spécifique.
