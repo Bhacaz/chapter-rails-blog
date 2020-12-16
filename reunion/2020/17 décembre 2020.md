@@ -34,10 +34,16 @@ nav_order: 22
 
 ### Stats
 
-**Commits**
+**Changed**
 
+Commits
 * 2019: 3920
 * 2020: 5267 (+1347)
+
+Insertions
+
+* 2019: 159 437
+* 2020: 198 569 (+39 132)
 
 **Contributors**
 
