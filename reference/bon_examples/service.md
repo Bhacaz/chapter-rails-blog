@@ -83,7 +83,7 @@ end
 
 **Implémentation:** [app/services/groups/memberships/seniority_service.rb](https://github.com/petalmd/petalmd.rails/blob/master/app/services/groups/memberships/seniority_service.rb)
 
-## Service générique (_PROPOSITION_)
+## Service générique
 
 [Ruby on Rails pattern: Service Objects](https://dev.to/joker666/ruby-on-rails-pattern-service-objects-b19)
 
