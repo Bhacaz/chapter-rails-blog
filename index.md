@@ -17,7 +17,7 @@ Petit tutoriel qui peuvent être pratiquent.
 
 ## [Blog](blog)
 
-Activle d'une certaine longueur qui peut service de références.
+Acticle d'une certaine longueur qui peut service de références.
 
 ## [Réunion](reunion)
 
