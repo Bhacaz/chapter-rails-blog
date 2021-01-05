@@ -21,7 +21,7 @@ Plusieurs cops de RuboCop Performance sont basé sur ces Benchmarks.
 ### Static
 
 * [RuboCop Performance](https://docs.rubocop.org/rubocop-performance/)
-* [Bullet](https://github.com/flyerhzm/bullet). À venir
+* [Bullet](https://github.com/flyerhzm/bullet).
 
 ### Benchmark
 
