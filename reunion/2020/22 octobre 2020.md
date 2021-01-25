@@ -137,7 +137,7 @@ le premier record exécute ses callbacks.
 
 C'est corriger en Rails 6 [rails/rails#36190](https://github.com/rails/rails/pull/36190)
 
-## `||=`
+## Conditional assignment operator `||=`
 
 ```ruby
 >> a = false
@@ -155,6 +155,18 @@ false
 
 Pour plus de détails: [what-rubys-double-pipe-or-equals-really-does](http://www.rubyinside.com/what-rubys-double-pipe-or-equals-really-does-5488.html
 )
+
+**Solution `defined?`**
+
+```ruby
+>> a = false
+false
+>> defined?(a) ? a : (a = 123)
+false
+```
+
+[Ruby Memoization: ||= vs. defined? syntax](https://karolgalanciak.com/blog/2017/05/28/ruby-memoization-equals-vs-defined-syntax/)
+
 
 ## Benchmark d'API `ab`
 
