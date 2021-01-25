@@ -165,7 +165,7 @@ false
 false
 ```
 
-[Ruby Memoization: ||= vs. defined? syntax](https://karolgalanciak.com/blog/2017/05/28/ruby-memoization-equals-vs-defined-syntax/)
+[Ruby Memoization syntax](https://karolgalanciak.com/blog/2017/05/28/ruby-memoization-equals-vs-defined-syntax/)
 
 
 ## Benchmark d'API `ab`
