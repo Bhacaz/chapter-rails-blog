@@ -5,13 +5,13 @@ parent: Blog
 nav_order: 1
 ---
 
-# Nouvelle class pour un teste
+# Nouvelle class pour un test
 
-Quand on veut tester un module on peux soit texter la class qui l'inclue ou (meillieur pratique) créé une nouvelle class qui l'include et juste testé la/les méthode.
+Quand on veut tester un module on peux soit texter la class qui l'inclut ou (meillieure pratique) créé une nouvelle class qui l'include et juste tester la/les méthode.
 
 ## Ce qu'on voit parfois
 
-On voit souvent des testes qui commence par:
+On voit souvent des tests qui commence par:
 
 ```ruby
 describe MyConcern do
@@ -23,12 +23,12 @@ describe MyConcern do
 end
 ```
 
-Le problème est que une fois déclarer la classe sera disponible dans tout les autres testes.
+Le problème est que une fois déclarée la classe sera disponible dans tout les autres tests.
 
 2 problèmes:
 
 * On ne veut pas polluer le namespace inutilement
-* Si on overwrite/open une class sa sera effectif pour toute la suite des testes
+* Si on overwrite/open une class sa sera effectif pour toute la suite des tests
 
 **Example**
 
@@ -49,11 +49,11 @@ describe 'My specs' do
 end
 ```
 
-Bien que `Foo` soit créé dans un autre context, il est définie dans un autre.
+Bien que `Foo` soit créé dans un autre context, il est défini dans un autre.
 
 ## Comment définir une class
 
-Avec `Class.new`, sa retourne un objet class (tout est une objet en Ruby) qui définie la méthode `#new` pour créé une instance de cette class.
+Avec `Class.new`, ça retourne un objet class (tout est un objet en Ruby) qui définit la méthode `#new` pour créé une instance de cette class.
 
 ```ruby
 describe 'My specs' do
