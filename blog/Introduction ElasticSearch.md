@@ -400,4 +400,6 @@ BooksIndex::Book.agg(term: { 'by_name' => { term: {field: 'first_name'}}})
 ```
 
 
+https://www.elastic.co/guide/en/elasticsearch/reference/7.10/query-dsl-intervals-query.html
+
 
