@@ -1,7 +1,7 @@
 ---
 layout: default
 title: RSpec
-parent: Bon examples
+parent: Bon exemples
 nav_order: 3
 grand_parent: Référence
 ---

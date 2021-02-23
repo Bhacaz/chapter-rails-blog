@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Bon examples
+title: Bon exemples
 parent: Référence
 nav_order: 4
 has_children: true
 ---
 
-# Bon examples
+# Bon exemples
 
 Cette section a pour bu de répertorier les bons examples qui se trouve dans le code source _petalmd.rails_.
 Avec le temps et les divergence des différents produit certain façon de faire ont évoluer mais pas nécessaire

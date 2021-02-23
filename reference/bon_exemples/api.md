@@ -1,7 +1,7 @@
 ---
 layout: default
 title: API
-parent: Bon examples
+parent: Bon exemples
 nav_order: 1
 grand_parent: Référence
 ---

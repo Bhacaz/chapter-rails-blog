@@ -7,12 +7,12 @@ nav_order: 2
 
 # Documentation
 
-Savoir comment rechercher dans la documentation peut savérer très pratique. Cela permet par examples de:
+Savoir comment rechercher dans la documentation peut savérer très pratique. Cela permet par exemples de:
 
 * trouver des méthodes qu'on ne connaisait pas
 * connaître les options possible
 * connaître les limites
-* voir des examples et les bonnes façons de faire
+* voir des exemples et les bonnes façons de faire
 
 ## Ruby
 

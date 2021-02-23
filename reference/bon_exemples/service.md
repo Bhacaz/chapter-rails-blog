@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Service
-parent: Bon examples
+parent: Bon exemples
 nav_order: 2
 grand_parent: Référence
 ---
