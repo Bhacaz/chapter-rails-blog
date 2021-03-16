@@ -144,15 +144,30 @@ sur tout les éléments de l'array.
 Voici quelque types qui peuvent être intéressant de savoir qu'il existe (voir la [doc](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html) pour plus d'info):
 * range, ip, completion, search_as_you_type, geo_point, geo_shape.
 
+### Source du document (`fields` VS `properties`)
+
+Dans l'exemple de mapping il y 2 nested propriétés qui sont définit différament.
+
+**`properties`**
+
+Les `properties` rajoute des élément à la `_source` du document. Le contenu sera donc retourné quand on va chercher le document.
+
+**`fields`**
+
+Les `fields` ne va pas altérer la `_source` du document. C'est donc disponible pour une opérations comme une recherche, mais pas
+retourné. On peut donc utilisé créer plus fields sans alourdir le contenu du document. On pourrait avoir par exemple plus `fields` qui utilise plusieurs analyzer
+pour un champ `first_name` (`first_name.ascii`, `first_name.standard`...)
+
+
 ## [Analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-overview.html)
 
 > Text analysis is the process of converting unstructured text, like the body of an email or 
 > a product description, into a structured format that’s optimized for search.
 
-Les 2 plus commun sont `keyword` et `text` (les 2 utilisé dans le mapping).
+Les 2 plus commun sont `keyword` et `standard` (les 2 utilisé dans le mapping).
 
 1. [`keyword`](https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html) (Analyzer `keyword`):
-   
+
 Ne fait aucune analyze. Il prendre le texte comme il est.  Pratique pour des id, courriel, code postal, tag.
 
 Exemple: si mon champs contient `Hello World!` ma recherche doit être exactement `Hello World!`, majuscule, espaces, etc.
@@ -167,7 +182,7 @@ POST _analyze
 Hello World!
 ```
 
-2. [`text`](https://www.elastic.co/guide/en/elasticsearch/reference/current/text.html) (Analyzer [`standard`](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html)):
+2. [`standard`](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) (Utiliser par défault pour les type [`text`](https://www.elastic.co/guide/en/elasticsearch/reference/current/text.html):
    L'analyzer `standard` est celui de base. Il décompose en mot avec les espaces, enlève la ponctuation, met tout en minuscule.
    
 ```bash
@@ -180,13 +195,140 @@ POST _analyze
 [hello world]
 ```
 
-Lors d'une recherche sur un champ analyzer, l'input est également analyzer avec le même analyzer. 
+Lors d'une recherche sur un champ analyzer, l'input est également analyzer avec le même analyzer.
+
+Exemple:
+
+```bash
+GET books/_search
+{
+  query: {
+    match: {
+      "title": "Hello"
+    }
+  }
+}
+```
+
+Le `Hello` va d'abord ce faire analyzer par le même analyzer que `title` (`standard`).
+Le match va donc s'effectuer avec query = `hello` et les tokens `[hello world]`
 
 Pour la suite, voir la [doc](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis.html). 
 On peut configurer un analyzer, en créer, etc...
 
-Voici une liste de concept qu'on peut y retrouver:
-* Choisir la langue, file path, pattern tokenizer (regex), n-gram (début de mot), keep types (garder les mot (défaut) + ponctuation), synonym, phonetic, reverse, unique
+## Créer et configuer des analyzer
+
+![analyzer](https://user-images.githubusercontent.com/7858787/111321948-cd932900-863e-11eb-811e-b7357dbe0c4b.png)
+
+### Analyzer
+
+Un analyzer est un nom pour regrouper une configuration de tokenizer et de token filter. Plusieurs analyzer sont disponible, certain peuvent être configurer d'autre non.
+
+### Tokenizer
+
+Règle pour séparer le texte à analyzer en plusieurs token. Des dizaines sont disponible et peuvent être configurer.
+
+### Token filter
+
+_Transforme_ chaque token générer par le tokenizer selon la règle établie. Des dizaines sont disponible et peuvent être configurer.
+Le plus courant est `lowercase`.
+
+### Comment tester
+
+**Analyzer**
+
+```bash
+GET _analyze
+{
+  "tokenizer": "standard",
+  "text" : "Médecine Vétérinaire"
+}
+
+[Médecine Vétérinaire]
+```
+
+**Tokenizer**
+
+```bash
+GET _analyze
+{
+  "tokenizer": "whitespace",
+  "text" : "Médecine Vétérinaire"
+}
+
+[Médecine Vétérinaire]
+```
+
+**Filter token**
+
+```bash
+GET _analyze
+{
+  "filter": ["lowercase"],
+  "text" : "Médecine Vétérinaire"
+}
+
+médecine vétérinaire
+
+GET _analyze
+{
+  "filter": ["lowercase", "asciifolding"],
+  "text" : "Médecine Vétérinaire"
+}
+
+medecine veterinaire
+
+GET _analyze
+{
+  "tokenizer": "standard", 
+  "filter": ["lowercase", "asciifolding"],
+  "text" : "Médecine Vétérinaire"
+}
+
+[medecine veterinaire]
+```
+
+### Créer un custom analyzer
+
+Un analyzer est reliser à un index et peut être créer quand on configure le mapping.
+
+Si on prendre le dernier exemple.
+
+```bash
+PUT specialties
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "standard_ascii_lower": {
+          "tokenizer": "standard",
+          "filter": ["asciifolding", "lowercase" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "specialty": {
+        "type": "text",
+        "analyzer": "standard_ascii_lower"
+      }
+    }
+  }
+}
+```
+
+On peut maintenant testé notre nouveau analyzer dans le scope de l'index.
+
+```bash
+POST specialties/_analyze
+{
+  "analyzer": "standard_ascii_lower",
+  "text": "Médecine Vétérinaire"
+}
+
+[medecine veterinaire]
+```
 
 ## [Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
 
