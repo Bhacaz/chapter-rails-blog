@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Performance
+title: Elasticsearch
 parent: Référence
 nav_order: 4
 ---
