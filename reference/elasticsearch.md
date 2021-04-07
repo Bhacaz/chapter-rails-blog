@@ -7,81 +7,46 @@ nav_order: 4
 
 # Elasticsearch
 
-## Dupliquer dans le nouveau cluster
+## ES deprecation and New query DSL
 
-La migration doit ce faire en 3 étapes.
-
-1. Créer le nouvel index
-2. Reset (créer et tout importer) dans le novuel index
-3. Modifier tout les endroit où on lit et écrit dans le vieux index pour le nouveau
-4. (Bonus) faire le ménage du code pour enlver le vieux index
-
-
-Voici un exemple concret avec `Schedule::TaskKindsIndex`
-
-### Créer le nouvel index
-
-1. Créer le nouveau fichier sous `app/chewy/new_cluster` avec les mêmes module et nom de classe.
-
-```text
-app/chewy/new_cluster/schedule/task_kinds_index.rb
-```
-
-2. Copier coller le contenu de la classe d'origine dans le nouveau fichier.
-3. Faire les modification suivante:
-    * Ajouter le `module NewCluster`
-    * Hériter de `< ::NewCluster::Chewy::Index`
-    * Si il y a lieu, modifier les `include SomeModule` pour `include ::NewCluster::SomeModule`
-4. Changer les `type: :string` => `type: :text` et
-   `type: :string, index: :not_analyzed` => `type: :keyword`
-   
-Le résultat devrait ressembler à ceci:
-
-```ruby
-# app/chewy/new_cluster/schedule/task_kinds_index.rb
-module NewCluster
-  module Schedule
-    class TaskKindsIndex < ::NewCluster::Chewy::Index
-      define_type ::Schedule::TaskKind do
-        field :id, type: :integer
-        ...
-      end
-    end
-  end
-end
-```
-
-5. Ajouter `extend ::NewCluster::SyncNewClusterConcern` dans le vieux index
-
-Une fois ce changement déployé le nouveau index va ce créer automatiquement au besoin. Tout les `import` et `update` dans le vieux
-index vont également être fais dans le nouveau (mais pas inversement) pour que tout soit synchronisé.
-
-**Prendre note** que les opérations sur la class index n'affecte pas le nouvel index. Exemple, `Schedule::TaskKindsIndex.import` 
-ne va pas tout réimporter dans `NewCluster::Schedule::TaskKindsIndex`. Seul les opérations sur la class type va s'effectuer sur les 2.
-Exemple, `Schedule::TaskKindsIndex::TaskKind.import` va tout réimporter dans le vieux comme dans le nouveau `NewCluster::Schedule::TaskKindsIndex::TaskKind`.
-
-## Reset
-
-Demander au Chapter Backend de lancer un reset du nouveau index. Exemple de commande pour test sur stg.
-
-```bash
-bundle exec rake chewy:sidekiq:reset['new_cluster/schedule/task_kinds']
-```
-
-## Modification lecture, écriture
-
-1. Faire le tour de l'app et test pour changer la class de l'index pour la nouvelle `Schedule::TaskKindsIndex` => '::NewCluster::Schedule::TaskKindsIndex'.
-2. Faire le tour des `update_index` pour utiliser le nouveau index `schedule/task_kinds#task_kind` => `new_cluster/schedule/task_kinds#task_kind`
-3. Modifier les query pour supporter le nouveau DSL et vérifier la compatibilité avec ES 7. Voir la section [new_query_dsl](#new_query_dsl) pour plus de détails.
-
-
-Une fois déployé, le vieux index ne sera en théorie plus mis à jour. 
-
-## New query DSL
+### only
 
 https://github.com/toptal/chewy/tree/v5.2.0#legacy-dsl-incompatibilities
 
 `only(:id)` => `source(:id)`
+
+### unlimited
+
+Cette méthode n'existe plus. Il est bon de ce rapeller que la limit par défaut dans ES est de 20. Il y a 3 alternatives:
+
+1. Savoir combien de document on veut (c'est la best pratique, mais pas toujours évidentes)
+   
+```ruby
+scope = NewCluster::AccountsIndex.filter(term: { first_name: 'Nancy' })
+scope.paginate(per_page: 10, page: 1).to_a
+```
+
+2. Juste avant d'exécuter la query on peut faire un count, c'est comme ça que ça fonctionnait avec `unlimited`
+
+```ruby
+scope = NewCluster::AccountsIndex.filter(term: { first_name: 'Nancy' })
+scope.limit(scope.count).to_a
+```
+
+3. Mettre un très gros chiffre `limit(Size::HUGE)` (à éviter SVP)
+
+```ruby
+scope = NewCluster::AccountsIndex.filter(term: { first_name: 'Nancy' })
+scope.limit(Size::HUGE).to_a
+```
+
+**Note** utilise `find` gère déjà très bien le `limit`.
+
+### Aggregations size
+
+[Size](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html#search-aggregations-bucket-terms-aggregation-size)
+
+On ne peut plus mettre `size: 0` pour retourner tout les d'une aggregation.
 
 ## Mapping
 
@@ -132,7 +97,11 @@ Comme règle je proposerais d'avoir des root field en `keyword` avec des sub-fie
 
 Les licences: "QC-1234". On pourrait avoir un `field` avec `territory` et un autre `number` juste pour chercher.
 
-```ruby
+<details>
+
+<summary>Exemple</summary>
+
+{% highlight ruby %}
 PUT license
 {
   "settings": {
@@ -169,5 +138,14 @@ PUT license
     }
   }
 }
-```
 
+{% endhighlight %}
+
+</details>
+
+## Aggregations
+
+Utiliser `collapse` pour retourner des distinct value plutôt que une aggregation `terms`.
+
+https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-collapse.html#search-request-collapse
+https://discuss.elastic.co/t/how-to-return-distinct-values-from-query-based-on-a-field/228000/2
