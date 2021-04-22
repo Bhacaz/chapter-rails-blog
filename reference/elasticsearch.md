@@ -7,47 +7,6 @@ nav_order: 4
 
 # Elasticsearch
 
-## ES deprecation and New query DSL
-
-### only
-
-https://github.com/toptal/chewy/tree/v5.2.0#legacy-dsl-incompatibilities
-
-`only(:id)` => `source(:id)`
-
-### unlimited
-
-Cette méthode n'existe plus. Il est bon de ce rapeller que la limit par défaut dans ES est de 20. Il y a 3 alternatives:
-
-1. Savoir combien de document on veut (c'est la best pratique, mais pas toujours évidentes)
-   
-```ruby
-scope = NewCluster::AccountsIndex.filter(term: { first_name: 'Nancy' })
-scope.paginate(per_page: 10, page: 1).to_a
-```
-
-2. Juste avant d'exécuter la query on peut faire un count, c'est comme ça que ça fonctionnait avec `unlimited`
-
-```ruby
-scope = NewCluster::AccountsIndex.filter(term: { first_name: 'Nancy' })
-scope.limit(scope.count).to_a
-```
-
-3. Mettre un très gros chiffre `limit(Size::HUGE)` (à éviter SVP)
-
-```ruby
-scope = NewCluster::AccountsIndex.filter(term: { first_name: 'Nancy' })
-scope.limit(Size::HUGE).to_a
-```
-
-**Note** utilise `find` gère déjà très bien le `limit`.
-
-### Aggregations size
-
-[Size](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html#search-aggregations-bucket-terms-aggregation-size)
-
-On ne peut plus mettre `size: 0` pour retourner tout les d'une aggregation.
-
 ## Mapping
 
 ### id
