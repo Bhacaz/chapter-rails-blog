@@ -13,8 +13,8 @@ nav_order: 4
 
 `field :id, type: :keyword`
 
-Le type `keyword` est le type le plu performant. Puisqu'on pratiquement jamais de query _range_, _greater than_ mais juste des filters
-`term` le plus efficace c'est de les mapper en `keyword`.
+Le type `keyword` est le type le plus performant. Puisqu'on pratiquement jamais de query _range_, _greater than_ mais juste des filters
+`terms` le plus efficace c'est de les mapper en `keyword`.
 
 > **Mapping numeric identifiers**
 > 
@@ -31,9 +31,45 @@ Le type `keyword` est le type le plu performant. Puisqu'on pratiquement jamais d
 > 
 > Source: [Keyword type family](https://www.elastic.co/guide/en/elasticsearch/reference/7.11/keyword.html)
 
-### Searchable
+### Multiple fields
 
-Faire du `multi_match` sur plusieurs champs ou un gros `should` peut ralentir la recherche. Une façon de chercher sur 
+Comme règle générale je proposerais d'avoir des **root field en `keyword`** avec des sub-fields pour la rechercher ou autre utilisation spécifique.
+
+* Certain type de recherche comme les prefix ne sont pas compatible avec les type keyword. Ce qui empêche
+  des query du type `match_prefix: { fields: [first_name.*] }` si il y a un `first_name.raw`.
+* Plus intuitive de savoir ce qui y a dans les fields exemple: `last_name` VS `last_name.folded`.
+* Assure une constance d'avoir la présence d'un type `keyword`. Ce qui peut toujours être pratique pour
+un filter sur un `code` de groupe par exemple connaisait la performance des keyword.
+
+Il peut y avoir plusieurs sub-fields différents qui répond a des besoin différents. Un bon et vrai cas d'utilisation serait grouper les
+noms de famille par première lettre de nom de famille.
+
+* last_name => keyword (Dubé)
+* last_name.standard => standard_ascii_lower (dube)
+* last_name.first_letter => first_letter_keyword (d)
+
+Ça permetterait de faire une filtre ou une aggregation très performant (à cause de l'analyzer keyword) sur un field specifique dédier. 
+
+### Choix de l'analyzer
+
+En règle général l'analyzer [`standard`](https://www.elastic.co/guide/en/elasticsearch/reference/7.10/analysis-standard-analyzer.html)
+est un excellent choix. Dans notre code il a été bonifier et est utilisable via **`standard_folding`**. C'est basé
+sur le `standard` fournie par ES, mais qui convertie les caractères non ascii (`é` => `e`), pratique en français.
+
+Les analyzers souvent utilisé dans le cluster ES1 `folding`, `minimal_folding` et `folding_ngram` son coûteux au moment de
+la réindexation et ne respecte pas les paramètres par défaut d'ES pour la création d'analyzer. C'est un béquille qui
+sert à chercher au début d'un mot. Ce qui peut facilement être fait avec une query `prefix`. Ils sont à éviter si possible.
+Seul la cas où on veut chercher au milieu d'un mot peu justifier d'utilisé `folding_ngram`, c'est rare et une [query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html)
+avec un wildcard au début est possible, mais peu performant. 
+
+La performance à la recherhe peut être améliorer avec [`index_prefixes`](https://www.elastic.co/guide/en/elasticsearch/reference/7.8/index-prefixes.html).
+
+L'utilisation du type [`search_as_you_type`](https://www.elastic.co/guide/en/elasticsearch/reference/7.8/search-as-you-type.html) 
+peut également être envisager. On en root on a l'analyzer spécifier, et des sub-fields automatiquement générerr avec du ngram et de la cache de prefix.
+
+### Searchable (experimental)
+
+Faire du `multi_match` sur plusieurs champs ou un gros `should` peut ralentir la recherche. Une façon de chercher sur
 1 seul champ a la fois est de contatenner tout les champs avec lequels on cherche habituellement (`first_name`, `last_name`)
 dans 1 seul champ `searchable`. C'est facilement réalisable durant le mapping avec `copy_to`.
 
@@ -49,58 +85,6 @@ le champ `searchable`. Un exemple réelle est la console, la même bar de recher
 * https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-search-speed.html#search-as-few-fields-as-possible
 * https://www.elastic.co/guide/en/elasticsearch/reference/current/copy-to.html
 * https://github.com/forem/forem/blob/d2d9984f28b1d0662f2a858b325a0e6b7a27a24c/config/elasticsearch/mappings/users.json#L57
-
-### Multiple fields
-
-Comme règle je proposerais d'avoir des root field en `keyword` avec des sub-fields pour chercher. Voici un exemple:
-
-Les licences: "QC-1234". On pourrait avoir un `field` avec `territory` et un autre `number` juste pour chercher.
-
-<details>
-
-<summary>Exemple</summary>
-
-{% highlight ruby %}
-PUT license
-{
-  "settings": {
-    "analysis": {
-      "analyzer": {
-        "standard_digits": {
-          "tokenizer": "digits"
-        }
-      },
-      "tokenizer": {
-        "digits": {
-          "type": "pattern",
-          "pattern": ["(\\D+)"
-          ]
-        }
-      }
-    }
-  },
-  "mappings": {
-    "properties": {
-      "license": {
-        "type": "keyword",
-        "fields": {
-          "territory": {
-            "type": "text",
-            "analyzer": "simple"
-          },
-          "number": {
-            "type": "text",
-            "analyzer": "standard_digits"
-          }
-        }
-      }
-    }
-  }
-}
-
-{% endhighlight %}
-
-</details>
 
 ## Aggregations
 
