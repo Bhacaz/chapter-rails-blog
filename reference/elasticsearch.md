@@ -33,19 +33,11 @@ Le type `keyword` est le type le plus performant. Puisqu'on pratiquement jamais 
 
 ### Multiple fields
 
-Comme règle générale je proposerais d'avoir des **root field en `keyword`** avec des sub-fields pour la rechercher ou autre utilisation spécifique.
-
-* Certain type de recherche comme les prefix ne sont pas compatible avec les type keyword. Ce qui empêche
-  des query du type `match_prefix: { fields: [first_name.*] }` si il y a un `first_name.raw`.
-* Plus intuitive de savoir ce qui y a dans les fields exemple: `last_name` VS `last_name.folded`.
-* Assure une constance d'avoir la présence d'un type `keyword`. Ce qui peut toujours être pratique pour
-un filter sur un `code` de groupe par exemple connaisait la performance des keyword.
-
 Il peut y avoir plusieurs sub-fields différents qui répond a des besoin différents. Un bon et vrai cas d'utilisation serait grouper les
 noms de famille par première lettre de nom de famille.
 
-* last_name => keyword (Dubé)
-* last_name.standard => standard_ascii_lower (dube)
+* last_name.raw => keyword (Dubé)
+* last_name.text_search => standard_ascii_lower (dube)
 * last_name.first_letter => first_letter_keyword (d)
 
 Ça permetterait de faire une filtre ou une aggregation très performant (à cause de l'analyzer keyword) sur un field specifique dédier. 
